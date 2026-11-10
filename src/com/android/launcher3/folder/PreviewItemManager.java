@@ -429,6 +429,11 @@ public class PreviewItemManager {
             p.drawable.setBounds(0, 0, iconSize, iconSize);
         }
 
+        // MonoLauncher: render folder preview icons in grayscale
+        if (p.drawable != null) {
+            p.drawable.setColorFilter(BubbleTextView.MONO_FILTER);
+        }
+
         p.item = item;
         // Set the callback to FolderIcon as it is responsible to drawing the icon. The
         // callback will be released when the folder is opened.
