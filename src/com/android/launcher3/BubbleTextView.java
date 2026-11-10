@@ -48,6 +48,9 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -128,6 +131,15 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
         FloatingIconViewCompanion, DraggableView, Reorderable {
 
     public static final String TAG = "BubbleTextView";
+
+    // MonoLauncher: grayscale filter, keeps the original icon shape and details
+    public static final ColorFilter MONO_FILTER = createMonoFilter();
+
+    private static ColorFilter createMonoFilter() {
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0f);
+        return new ColorMatrixColorFilter(matrix);
+    }
 
     public static final int DISPLAY_WORKSPACE = 0;
     public static final int DISPLAY_ALL_APPS = 1;
@@ -1453,6 +1465,8 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
         }
         mIcon = icon;
         if (mIcon != null) {
+            // MonoLauncher: render every icon in grayscale
+            mIcon.setColorFilter(MONO_FILTER);
             mIcon.setVisible(getWindowVisibility() == VISIBLE && isShown(), false);
             mIcon.setHoverScaleEnabledForDisplay(mDisplay != DISPLAY_TASKBAR);
         }
